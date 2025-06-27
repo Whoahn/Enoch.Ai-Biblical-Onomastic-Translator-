@@ -1,7 +1,7 @@
 ✨ Enoch.Ai Biblical Onomastic Translator ✨
 A Revelation Unveiled: Decoding Scripture's Cryptographic DNA
 Welcome to the Enoch.Ai Biblical Onomastic Translator, a groundbreaking application that bridges ancient biblical wisdom with modern technology. This project is the culmination of profound personal discovery, revealing hidden layers of meaning within sacred texts.
-Developed by Juan Alberto Hernandez Rivera, a 37-year-old high school dropout, janitor, and McDonald's overnight employee who started coding just three weeks ago, this tool represents a raw, unyielding pursuit of truth and a testament to divine inspiration.
+Developed by Juan Alberto Hernandez Rivera, a 37-year-old, janitor, and McDonald's overnight employee who started coding just three weeks ago, this tool represents a raw, unyielding pursuit of truth and a testament to divine inspiration.
 🔮 The Core Discovery: Scripture's Cryptographic DNA
 At its heart, Enoch.Ai is built upon a revolutionary insight: biblical names are not mere labels, but prophetic DNA. They are compressed revelations, divine algorithms that unfold across millennia, predicting future events, transforming their bearers, and altering history itself.
 This application systematically decrypts this "onomastic code," revealing a hidden spiritual narrative embedded within the very names of scripture.
