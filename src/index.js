@@ -1000,15 +1000,8 @@ const EnochAiOnomasticTranslator = () => {
     speechSynthesis.speak(utterance);
   };
 
-  const handlePauseResumeSpeech = () => {
-    if (speechSynthesis.speaking && !paused) {
-      speechSynthesis.pause();
-      setPaused(true);
-    } else if (speechSynthesis.paused) {
-      speechSynthesis.resume();
-      setPaused(false);
-    }
-  };
+  
+
 
   const handleStopSpeech = () => {
     if (speechSynthesis.speaking || speechSynthesis.paused) {
