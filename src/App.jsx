@@ -1,5 +1,13 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-
+    const debounce = (func, delay) => {
+      let timeout;
+      return function(...args) {
+        const context = this;
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(context, args), delay);
+      };
+    };
+    
 // ==============================================================================
 // Enoch.Ai Biblical Onomastic Translator (Version 12)
 // Developed by Juan Alberto Hernandez Rivera
