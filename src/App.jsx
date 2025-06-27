@@ -520,8 +520,8 @@ function App() {
       </footer>
     </div>
   );
-
 }
-export default App; // Solution: 'export' is on a new line after '}'
+        
+export default App; // No comment on this line
 
 
