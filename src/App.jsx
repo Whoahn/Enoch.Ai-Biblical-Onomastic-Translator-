@@ -1000,16 +1000,7 @@ const EnochAiOnomasticTranslator = () => {
     speechSynthesis.speak(utterance);
   };
 
-  const handlePauseResumeSpeech = () => {
-    if (speechSynthesis.speaking && !paused) {
-      speechSynthesis.pause();
-      setPaused(true);
-    } else if (speechSynthesis.paused) {
-      speechSynthesis.resume();
-      setPaused(false);
-    }
-  };
-
+ 
 
 
   // Helper function to render Markdown content, specifically for the manifesto.
