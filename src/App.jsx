@@ -1010,14 +1010,7 @@ const EnochAiOnomasticTranslator = () => {
     }
   };
 
-  const handleStopSpeech = () => {
-    if (speechSynthesis.speaking || speechSynthesis.paused) {
-      speechSynthesis.cancel();
-      setSpeaking(false);
-      setPaused(false);
-      setCurrentUtterance(null);
-    }
-  };
+
 
   // Helper function to render Markdown content, specifically for the manifesto.
   // This allows for basic Markdown formatting within the translated strings.
