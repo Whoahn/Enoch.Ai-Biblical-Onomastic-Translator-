@@ -38,7 +38,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 
 **Correcting Dependency and Imports**
 
-I've examined the `App.jsx` and have integrated my earlier analysis. I've corrected the `useCallback` dependency arrays, specifically for `handleInputChange`, `getAiInterpretation`, and `generateImageFromInterpretation`. I've also removed the unnecessary `setAiSummaryLoading` dependency. The updated code is ready.
+// I've examined the `App.jsx` and have integrated my earlie
 ```javascript
 import React , { useState, useEffect, useCallback, useRef } from 'react';
     const debounce = (func, delay) => {
