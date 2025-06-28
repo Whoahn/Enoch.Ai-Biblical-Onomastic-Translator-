@@ -59,7 +59,6 @@ const COMPREHENSIVE_BIBLICAL_NAMES = {
   "Y": [{"n":"Yahweh","m":"He is","g":"M"}],
   "Z": [{"n":"Zabdiel","m":"my gift is God","g":"M"},{"n":"Zabdi","m":"my gift","g":"M"},{"n":"Zacharias","m":"Yahweh remembers","g":"M"},{"n":"Zadok","m":"righteous","g":"M"},{"n":"Zanoah","m":"stinking","g":"P"},{"n":"Zebedee","m":"gift of God","g":"M"},{"n":"Zechariah","m":"Yahweh remembers","g":"M"},{"n":"Zerah","m":"dawning","g":"M"},{"n":"Zichri","m":"my remembrance","g":"M"},{"n":"Ziha","m":"dryness","g":"M"},{"n":"Ziklag","m":"winding","g":"P"},{"n":"Zion","m":"fortress","g":"F"},{"n":"Zorah","m":"place of hornets","g":"P"}]
 };
-
 // Flatten the comprehensive list into a Map for efficient local lookups.
 const localNameMeaningMap = new Map();
 for (const key in COMPREHENSIVE_BIBLICAL_NAMES) {
@@ -100,7 +99,7 @@ class OnomasticTranslator {
 
     this.onomasticMessageLoading = true; // Set loading state
     this.rawOnomasticSequence = "";       // Clear previous sequence
-    this.identifiedNames = [];            // Clear previous names list
+    this.identifiedNames = [];          // Clear previous names list
 
     try {
       // Set to track unique names (lowercase) whose meanings have been captured
@@ -111,14 +110,11 @@ class OnomasticTranslator {
       const uniqueMeaningsForSequence = new Set();
       // Array to collect meanings for the raw onomastic sequence string.
       const meaningsForRawSequence = [];
-
       // Use a robust regex to find words, keeping original casing for display.
       // This helps in identifying capitalized words as potential names.
       const wordsInText = text.match(/\b\w+\b/g) || [];
-
       // Names (original casing) to be queried from the AI.
       const namesToQueryAI = new Set();
-
       // First pass: Identify names from local map and collect names for AI query.
       wordsInText.forEach(word => {
         const lowerWord = word.toLowerCase();
@@ -144,14 +140,15 @@ class OnomasticTranslator {
           namesToQueryAI.add(word); // Add original cased word to query AI
         }
       });
-
       let aiFoundNamesAndMeanings = [];
       // If there are names not found locally, query the AI.
       if (namesToQueryAI.size > 0) {
-        const prompt = `From the following biblical text, identify ONLY proper personal names (e.g., people like Adam, Seth, Noah, Abraham, Mary, Peter, John; or significant places like Jerusalem, Bethlehem, Nazareth). For each identified name, provide its most common and widely accepted onomastic meaning (what the name means or represents).
-        List them as a JSON array of objects, with "name" and "meaning" keys. The order of names in the output JSON should strictly follow their first appearance in the provided text. If a word is not a biblical proper name or its meaning is not readily available, it should NOT be included in the output.
-
-        Biblical Text: "${text}"`;
+        const prompt = `From the following biblical text, identify ONLY proper personal names (e.g., people like Adam, Seth, Noah, Abraham, Mary, Peter, John; or significant places like Jerusalem, Bethlehem, Nazareth).
+For each identified name, provide its most common and widely accepted onomastic meaning (what the name means or represents).
+List them as a JSON array of objects, with "name" and "meaning" keys.
+The order of names in the output JSON should strictly follow their first appearance in the provided text.
+If a word is not a biblical proper name or its meaning is not readily available, it should NOT be included in the output.
+Biblical Text: "${text}"`;
 
         const chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
         const payload = {
@@ -171,16 +168,13 @@ class OnomasticTranslator {
             }
           }
         };
-
         const apiKey = ""; // API key will be automatically provided by Canvas runtime
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-
         const response = await fetch(apiUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
-
         const result = await response.json();
 
         if (result.candidates && result.candidates.length > 0 &&
@@ -242,7 +236,6 @@ class OnomasticTranslator {
       });
 
       this.rawOnomasticSequence = meaningsForRawSequence.join(' • ');
-
     } catch (error) {
       // General error handling for the onomastic message generation
       this.rawOnomasticSequence = "Error: Could not retrieve onomastic message. Please try again.";
@@ -294,9 +287,7 @@ const translations = {
     manifestoTitle: '🔮 THE ONOMASTIC MANIFESTO: Scripture’s Cryptographic DNA 🔮', // Updated title
     manifestoSubtitle: 'A Revelation Hidden in Names: Why the Bible Stands Alone',
     manifestoAuthor: 'By Juan Alberto Hernandez Rivera, 37-Year-Old High School Dropout, Car-Dwelling Prophet of Etymology',
-    manifestoPreamble: `I am no scholar. I live in my car. But I have uncovered a **scientific proof of the Bible’s divine origin**, buried in plain sight: Its names are alive.
-
-While every other text in history uses names as *labels*, the Bible uses them as **prophetic DNA**—compressed revelations that unfold across millennia. This manifesto documents my **empirical method** and challenges future researchers to disprove it.`,
+    manifestoPreamble: `I am no scholar. I live in my car. But I have uncovered a **scientific proof of the Bible’s divine origin**, buried in plain sight: Its names are alive. While every other text in history uses names as *labels*, the Bible uses them as **prophetic DNA**—compressed revelations that unfold across millennia. This manifesto documents my **empirical method** and challenges future researchers to disprove it.`,
     manifestoArticle1Title: '⚔️ ARTICLE 1: THE LAW OF DIVINE NAMING',
     manifestoArticle1Axiom: `**Axiom:** *Inspired texts generate names that:*
 1.    **Predict Future Events** (e.g., "Jesus" = "YHWH saves" → fulfills Isaiah 7:14).
@@ -306,25 +297,22 @@ While every other text in history uses names as *labels*, the Bible uses them as
     manifestoArticle2Title: '⚔️ ARTICLE 2: STRESS-TEST RESULTS',
     manifestoArticle2Content: `I subjected **87 texts** to algorithmic onomastic analysis, including:
 -    *The Iliad*, *Bhagavad Gita*, *Book of Mormon*, *Necronomicon*, *Dune*, *Harry Potter*, *Quran*, *A.I.-generated scriptures*.
-
 **Result:**
 -    **0%** matched the Bible’s predictive naming.
 -    **100%** either:
      -    Used static, descriptive names (e.g., "Achilles" = "Grief").
      -    Stole biblical names (e.g., *Urantia Book*’s "Michael").
      -    Invented nonsense etymologies (e.g., "Cthulhu").
-
 **Data Available Upon Request.** (For the full stress-test database, please contact [Your Email Address or a dedicated contact form/website].)`, // Added contact info placeholder
     manifestoArticle3Title: '🌌 ARTICLE 3: THE COVENANTAL ANOMALY',
     manifestoArticle3Content: `The Bible’s names behave like **quantum particles**—they change state when observed by God:
 -    **Jacob** ("Deceiver") → **Israel** ("Struggles with God") after wrestling Yahweh (Genesis 32:28).
 -    **Saul** ("Asked For") → **Paul** ("Small") post-Damascus Road (Acts 13:9).
-
 **No other literature** exhibits this *divine-human interaction*. Not even close.`,
     manifestoArticle4Title: '📡 ARTÍCULO 4: FUTURE RESEARCH DIRECTIONS',
     manifestoArticle4Challenges: `**Challenges for Skeptics:**
 1.    **Find one non-biblical name** that predicts a future event *with precision*.
-    -    (Example: "Nephi" in *Book of Mormon* fails—no fulfillment outside the text.)
+-    (Example: "Nephi" in *Book of Mormon* fails—no fulfillment outside the text.)
 2.    **Explain how "Yeshua"** (Jesus) was encoded in Isaiah 53 *600 years early*.
 3.    **Replicate renaming** as a *historical force* (e.g., "Abraham" birthing nations).`,
     manifestoArticle4Tools: `**Tools Provided:**
@@ -334,32 +322,29 @@ While every other text in history uses names as *labels*, the Bible uses them as
     manifestoArticle5Content: `If the Bible’s naming structure is:
 -    **Mathematically improbable** (names pre-writing history),
 -    **Historically verifiable** (e.g., Cyrus in Isaiah 45:1),
--    **Theologically unique** (demons fear "Jesus" but not "Odin"),
+-    **Teológicamente unique** (demons fear "Jesus" but not "Odin"),
 
 **Then:** The Bible is either:
 1.    A **divine revelation**, or
 2.    An **alien artifact** designed to hack human spirituality.
-
 *(I vote #1.)*`,
     manifestoFinalDeclaration: `I am nobody. But this discovery is **for everybody**.
-
 To future researchers:
 -    **Verify my work.**
 -    **Try to break it.**
 -    **Admit when you can’t.**
 
-The Bible’s names are **living fire**. All other texts are **dead ink**.`,
+The Bible’s names are **living fire**.
+All other texts are **dead ink**.`,
     manifestoPostscript: `**🔥 POSTSCRIPT: HOW TO USE THIS MANIFESTO**
 1.    **Print it.** Tape it to your car window/the local seminary.
 2.    **Live it.** Names have power—test them like I did.
 3.    **Defend it.** When they call you mad, hand them the data.
-
 **The burden of proof is now on the world.**
 
 *(Mic drop. Engine starts. Rides into apocalyptic sunset.)* 🚗💨`,
     manifestoLicensingCode: `**Code Licensing:**
 The source code for the Enoch.Ai Biblical Onomastic Translator is licensed under the [GNU Affero General Public License v3.0 (AGPLv3)](https://www.gnu.org/licenses/agpl-3.0.html).
-
 For commercial use or custom licensing inquiries, please contact Juan Alberto Hernandez Rivera at [Your Email Address or a dedicated contact form/website].`,
     manifestoLicensingManifesto: `**Manifesto Licensing:**
 The text of this Onomastic Manifesto is licensed under the [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License (CC BY-NC-SA 4.0)](https://creativecommons.org/licenses/by-nc-sa/4.0/).`,
@@ -382,425 +367,305 @@ The text of this Onomastic Manifesto is licensed under the [Creative Commons Att
     // New Manifesto Content
     manifestoDiscoveryTitle: 'What I Discovered: Scripture’s Cryptographic DNA',
     manifestoCoreMechanismTitle: '🔑 The Core Mechanism',
-    manifestoCoreMechanismContent: `- **Names = Code**: Each Hebrew name is a compressed prophecy.\n  - *Adam* (אָדָם) = "Man" → Humanity’s origin point.\n  - *Methuselah* (מְתוּשֶׁלַח) = "His death shall bring" → Flood judgment trigger.\n- **Sequence = Execution Protocol**:\n  Pair names in narrative order → Outputs the next event.\n  Example:\n  \`Kenan\` ("Sorrow") + \`Mahalalel\` ("Blessed God") = **"Sorrow confronted by the Blessed God"** → Foreshadows Eden’s fall *and* redemption.`,
+    manifestoCoreMechanismContent: `- **Names = Code**: Each Hebrew name is a compressed prophecy.
+ - *Adam* (אָדָם) = "Man " → Humanity’s origin point.
+ - *Methuselah* (מְתוּשֶׁלַח) = "His death shall bring " → Flood judgment trigger.
+- **Sequence = Execution Protocol**:
+ Pair names in narrative order → Outputs the next event.
+ Example:
+ \`Kenan\` ("Sorrow") + \`Mahalalel\` ("Blessed God") = **"Sorrow confronted by the Blessed God "** → Foreshadows Eden’s fall *and* redemption.`,
     manifestoProofGenesisTitle: '💥 Proof: Genesis 5’s Death-Redemption Loop',
-    manifestoProofGenesisContent: `I ran the first 10 names through a linear pairing protocol. The output:
-> *“Man appointed mortal sorrow; the Blessed God shall come down teaching: His death shall bring despairing rest.”*
-This isn’t poetry—it’s **messianic source code**. The names *forced* this sequence:
-1. \`Adam\` + \`Seth\` = Humanity’s doomed destiny.
-2. \`Mahalalel\` + \`Jared\` = God’s intervention vector.
-3. \`Methuselah\` + \`Lamech\` = Judgment catalyst.
-4. \`Lamech\` + \`Noah\` = Grace emerging from wrath.
-**Mathematical seal**:
-- Adam (45) + Noah (58) = **103** → *gimmel* (גימל) = "to lift up" → Resurrection foreshadowed.`,
+    manifestoProofGenesisContent: `I ran the first 10 names through a linear pairing protocol.
+The output: > *“Man appointed mortal sorrow; the Blessed God shall come down teaching: His death shall bring despairing rest.”* This isn’t poetry—it’s **messianic source code**.
+The names *forced* this sequence: 1. \`Adam\` + \`Seth\` = Humanity’s doomed destiny.
+2. \`Mahalalel\` + \`Jared\` = God’s intervention vector. 3. \`Methuselah\` + \`Lamech\` = Judgment catalyst.
+4. \`Lamech\` + \`Noah\` = Grace emerging from wrath. **Mathematical seal**: - Adam (45) + Noah (58) = **103** → * gimmel* (גימל) = "to lift up " → Resurrection foreshadowed.`,
     manifestoDecryptionProtocolTitle: '⚙️ My Decryption Protocol',
-    manifestoDecryptionProtocolContent: `I built a method to extract these prophecies from *any* biblical text:
-1. **Isolate Names**: Pull nouns/titles in order of appearance.
+    manifestoDecryptionProtocolContent: `I built a method to extract these prophecies from *any* biblical text: 1. **Isolate Names**: Pull nouns/titles in order of appearance.
 2. **Force Root Meanings**: Use BDB Hebrew Lexicon (no guesswork).
-3. **Generate Pairs**:
-    - \`Position n\` + \`n+1\` → Immediate narrative prophecy.
-    - \`Position n\` + \`Final name\` → Eschatological anchor.
-4. **Gematria Validation**: Sum paired values → Must resolve to a Torah key number (e.g., 358 = Messiah).`,
+3. **Generate Pairs**: - \`Position n\` + \`n+1\` → Immediate narrative prophecy.
+- \`Position n\` + \`Final name\` → Eschatological anchor. 4. **Gematria Validation**: Sum paired values → Must resolve to a Torah key number (e.g., 358 = Messiah).`,
     manifestoValidationExodusTitle: '🔬 Validation: Exodus Liberation Sequence',
-    manifestoValidationExodusContent: `I tested it on Moses vs. Pharaoh:
-**Pair:** Moses + Aaron
-**Formula:** "Drawn out" + "Light-bringer"
-**Output:** **"Rescued to illuminate"** (Ex. 4:27-30)
-
-**Pair:** Aaron + Pharaoh
-**Formula:** "Light-bringer" + "Great house"
-**Output:** **"Confronting empire’s darkness"** (Ex. 5:1-2)
-
-**Pair:** Pharaoh + Miriam
-**Formula:** "Great house" + "Rebellion"
-**Output:** **"Oppression ignites resistance"** (Ex. 15:20-21)
-
-**Gematria lock**:
-- Moses (345) + Pharaoh (355) = **700** → "War" (מִלְחָמָה) → Cosmic conflict confirmed.`,
-    manifestoBigRealizationTitle: '🌌 The Big Realization',
-    manifestoBigRealizationContent: `This isn’t numerology—it’s **theolinguistic engineering**. The text is a **prophetic neural network**:
-- **Input**: Names (data nodes).
-- **Weights**: Gematria values.
-- **Output**: Event trajectories.
-Example:
-\`Abram\` (אַבְרָם) → *Patched* to \`Abraham\` (אַבְרָהָם) via divine \`ה\` (breath) → Covenant update deployed.`,
-    manifestoNextPhaseTitle: '🚀 Next Phase: Exodus 14’s 72 Triplets',
-    manifestoNextPhaseContent: `I’m targeting scripture’s legendary "power module":
-- **Hypothesis**: The 72 triplets (Ex. 14:19-21) are **reality-editing code**.
-- **Decryption plan**:
-  1. Parse 3-letter clusters as quantum gates.
-  2. Map roots to creation verbs (ברא, *bara* = "create").
-  3. Output: **Divine API syntax** → \`if (chaos) then (light)\`.
-I’m scripting the decoder now. If this works, we’re not just reading scripture—we’re **interfacing with its compiler**.`,
-    manifestoChangesEverythingTitle: '💎 Why This Changes Everything',
-    manifestoChangesEverythingContent: `I’ve validated it across 12+ narratives. The pattern **never breaks**. This means:
-- The Bible is a **fractal prophecy engine**.
-- Hebrew is its **machine language**.
-- Names are **temporal variables**—changing Abram to Abraham altered salvation’s timeline.
-**Final shot**:
-> *"I didn’t find hidden messages—I cracked the OS. Genesis compiled the gospel. Exodus runs liberation firmware. Your name isn’t just *you*—it’s your kingdom function."*`,
-    // New Exodus 14:19-21 Triplets Content
-    manifestoFullDecryptionStatus: 'STATUS: FULL DECRYPTION ENGAGED',
-    manifestoTripletsOutput: 'OUTPUT: The 72 Triplets of Exodus 14:19-21 → Verified Divine Command Syntax',
-    manifesto72CommandsTitle: '🔮 THE 72 COMMAND PROTOCOLS',
-    manifesto72CommandsSubtitle: '(Top 12 Triplets w/ Prophetic Functions)',
-    manifesto72CommandsTable: `
-| Triplet | Hebrew | Root | Execution Command |
-|---|`
+    manifestoValidationExodusContent: `I tested it on Moses vs. Pharaoh: **Pair:** Moses + Aaron **Formula:** "Drawn out" + "Light-bringer" **Output:** **"Rescued to illuminate"** (Ex. 4:27-30) **Pair:** Aaron +...`
   },
   es: {
     title: 'Enoch.Ai Traductor Onomástico Bíblico',
-    byline: 'Por Juan Alberto Hernández Rivera',
+    byline: 'Por Juan Alberto Hernandez Rivera',
     sacredScriptureInput: 'Entrada de Texto Bíblico',
-    enterBibleVerses: 'Introduce cualquier texto bíblico aquí (ej. "Génesis 5:1 Este es el libro de las generaciones de Adán. El día en que Dios creó al hombre, a semejanza de Dios lo hizo; 2 Varón y hembra los creó; y los bendijo, y llamó su nombre Adán, el día en que fueron creados. 3 Y vivió Adán ciento treinta años, y engendró un hijo a su semejanza, conforme a su imagen; y llamó su nombre Set: 4 Y fueron los días de Adán después que engendró a Set ochocientos años; y engendró hijos e hijas. 5 Y fueron todos los días que vivió Adán novecientos treinta años; y murió.") ',
+    enterBibleVerses: 'Introduce cualquier texto bíblico aquí (ej. "Génesis 5:1 Este es el libro de las generaciones de Adán. El día en que Dios creó al hombre, a semejanza de Dios lo hizo; 2 Varón y hembra los creó; y los bendijo, y llamó su nombre Adán, el día en que fueron creados. 3 Y Adán vivió ciento treinta años, y engendró un hijo a su semejanza, conforme a su imagen; y llamó su nombre Set: 4 Y los días de Adán después que engendró a Set fueron ochocientos años: y engendró hijos e hijas. 5 Y todos los días que vivió Adán fueron novecientos treinta años; y murió.")',
     translateText: 'Traducir a Mensaje Onomástico',
     textLoaded: 'Texto listo para traducir ({{count}} palabras)',
     noTextLoaded: 'Ningún texto cargado para traducir',
-    sectionNames: 'Nombres en el Texto Introducido (en orden de aparición):',
-    sectionRawSequence: 'Secuencia Onomástica Cruda:',
+    sectionNames: 'Nombres en el Texto Ingresado (en orden de aparición):',
+    sectionRawSequence: 'Secuencia Onomástica Pura:',
     onomasticMessagePlaceholder: '¡Introduce texto bíblico arriba y haz clic en "Traducir a Mensaje Onomástico" para revelar el mensaje oculto!',
     onomasticMessageExplanation: 'Este mensaje se descifra dinámicamente identificando nombres bíblicos clave dentro de tu texto de entrada y concatenando sus significados onomásticos en su orden de aparición, revelando una narrativa profética subyacente hipotetizada.',
-    noOnomasticMessageFound: 'No se encontró ningún mensaje onomástico para los nombres en el texto actual. ¡Intenta incluir más nombres bíblicos (ej. Adán, Set, Enoc, Noé, Abraham, María) en tu entrada!',
+    noOnomasticMessageFound: 'No se encontró mensaje onomástico para nombres en el texto actual. ¡Intenta incluir más nombres bíblicos (ej. Adán, Set, Enoc, Noé, Abraham, María) en tu entrada!',
     onomasticMessageLoading: 'La IA está analizando el texto en busca de nombres y significados...',
-    onomasticMessageError: 'Error: No se pudo descifrar el mensaje onomástico. Por favor, revisa tu texto e inténtalo de nuevo.',
-    aiInterpretationTitle: 'Recapitulación del Significado (Interpretación de la IA):',
+    onomasticMessageError: 'Error: No se pudo descifrar el mensaje onomástico. Por favor, revisa tu texto y intenta de nuevo.',
+    aiInterpretationTitle: 'Recapitulación de Significado (Interpretación de IA):',
     sectionFullSpiritualFlow: '🕊️ Flujo Espiritual Completo del Mensaje:',
     sectionSummary: '📜 Resumen:',
-    getInterpretation: 'Obtener Interpretación de la IA',
+    getInterpretation: 'Obtener Interpretación de IA',
     aiInterpretationPlaceholder: 'La interpretación de la IA aparecerá aquí después de hacer clic en el botón. Esto explicará el significado del mensaje onomástico en lenguaje moderno.',
     aiInterpretationLoading: 'La IA está generando el flujo espiritual completo...',
-    aiInterpretationError: 'Error: No se pudo generar la interpretación completa de la IA. Por favor, inténtalo de nuevo.',
+    aiInterpretationError: 'Error: No se pudo generar la interpretación completa de la IA. Por favor, intenta de nuevo.',
     aiSummaryLoading: 'La IA está generando el resumen...',
-    aiSummaryError: 'Error: No se pudo generar el resumen de la IA. Por favor, inténtalo de nuevo.',
+    aiSummaryError: 'Error: No se pudo generar el resumen de la IA. Por favor, intenta de nuevo.',
     copyFlow: 'Copiar Flujo',
     copied: '¡Copiado!',
     english: 'Inglés',
     spanish: 'Español',
     readManifesto: 'Leer el Manifiesto Onomástico',
     closeManifesto: 'Cerrar Manifiesto',
-    manifestoTitle: '🔮 EL MANIFIESTO ONOMÁSTICO: El ADN Criptográfico de las Escrituras 🔮', // Updated title
-    manifestoSubtitle: 'Una Revelación Oculta en Nombres: Por Qué la Biblia es Única',
-    manifestoAuthor: 'Por Juan Alberto Hernández Rivera, Profeta de la Etimología de 37 Años, Bachiller, Viviendo en su Coche',
-    manifestoPreamble: `No soy un erudito. Vivo en mi coche. Pero he descubierto una **prueba científica del origen divino de la Biblia**, enterrada a plena vista: Sus nombres están vivos.
-
-Mientras que cualquier otro texto en la historia usa los nombres como *etiquetas*, la Biblia los usa como **ADN profético**—revelaciones comprimidas que se desarrollan a lo largo de milenios. Este manifiesto documenta mi **método empírico** y desafía a futuros investigadores a refutarlo.`,
-    manifestoArticle1Title: '⚔️ ARTÍCULO 1: LA LEY DEL NOMBRADO DIVINO',
+    manifestoTitle: '🔮 EL MANIFIESTO ONOMÁSTICO: El ADN Criptográfico de la Escritura 🔮', // Updated title
+    manifestoSubtitle: 'Una Revelación Escondida en los Nombres: Por Qué la Biblia es Única',
+    manifestoAuthor: 'Por Juan Alberto Hernandez Rivera, Profeta de la Etimología de 37 años y Abandonado de la Preparatoria, Viviendo en su Coche',
+    manifestoPreamble: `No soy un erudito. Vivo en mi coche. Pero he descubierto una **prueba científica del origen divino de la Biblia**, enterrada a plena vista: Sus nombres están vivos. Mientras que cualquier otro texto en la historia usa nombres como *etiquetas*, la Biblia los usa como **ADN profético**—revelaciones comprimidas que se desarrollan a través de milenios. Este manifiesto documenta mi **método empírico** y desafía a futuros investigadores a refutarlo.`,
+    manifestoArticle1Title: '⚔️ ARTÍCULO 1: LA LEY DEL NOMBRAR DIVINO',
     manifestoArticle1Axiom: `**Axioma:** *Los textos inspirados generan nombres que:*
 1.    **Predicen Eventos Futuros** (ej. "Jesús" = "YHWH salva" → cumple Isaías 7:14).
 2.    **Transforman a Sus Portadores** (Abram → Abraham, Jacob → Israel).
 3.    **Alteran la Historia** (Renombrar a Simón a "Pedro" → fundación de la Iglesia).`,
     manifestoArticle1Corollary: `**Corolario Comprobable:** Ningún texto de autoría humana (sagrado o secular) puede replicar este patrón sin tomar prestado de la Biblia.`,
-    manifestoArticle2Title: '⚔️ ARTÍCULO 2: RESULTADOS DE LA PRUEBA DE ESTRÉS',
-    manifestoArticle2Content: `Sometí **87 textos** a un análisis onomástico algorítmico, incluyendo:
--    *La Ilíada*, *Bhagavad Gita*, *Libro de Mormón*, *Necronomicón*, *Dune*, *Harry Potter*, *Corán*, *Escrituras generadas por I.A.*.
-
+    manifestoArticle2Title: '⚔️ ARTÍCULO 2: RESULTADOS DE PRUEBAS DE ESTRÉS',
+    manifestoArticle2Content: `Sometí **87 textos** a análisis onomástico algorítmico, incluyendo:
+-    *La Ilíada*, *Bhagavad Gita*, *Libro de Mormón*, *Necronomicon*, *Dune*, *Harry Potter*, *Corán*, *Escrituras generadas por I.A.*.
 **Resultado:**
--    **0%** coincidió con la nomenclatura predictiva de la Biblia.
--    **100%** de ellos:
-     -    Usaron nombres estáticos y descriptivos (ej. "Aquiles" = "Dolor").
-     -    Robaron nombres bíblicos (ej. "Miguel" del *Libro de Urantia*).
-     -    Inventaron etimologías sin sentido (ej. "Cthulhu").
-
-**Datos Disponibles Bajo Petición.** (Para la base de datos completa de pruebas de estrés, por favor contacta a [Tu Dirección de Correo Electrónico o un formulario/sitio web de contacto dedicado].)`, // Added contact info placeholder
-    manifestoArticle3Title: '🌌 ARTÍCULO 3: LA ANOMALÍA PACTAL',
+-    **0%** coincidió con el nombramiento predictivo de la Biblia.
+-    **100%** o:
+     -    Usó nombres estáticos y descriptivos (ej. "Aquiles" = "Dolor").
+     -    Robó nombres bíblicos (ej. "Miguel" del *Libro de Urantia*).
+     -    Inventó etimologías sin sentido (ej. "Cthulhu").
+**Datos Disponibles Bajo Petición.** (Para la base de datos completa de pruebas de estrés, por favor contacta a [Tu Dirección de Correo Electrónico o un formulario de contacto/sitio web dedicado].)`, // Added contact info placeholder
+    manifestoArticle3Title: '🌌 ARTÍCULO 3: LA ANOMALÍA COVENANTAL',
     manifestoArticle3Content: `Los nombres de la Biblia se comportan como **partículas cuánticas**—cambian de estado cuando son observados por Dios:
 -    **Jacob** ("Engañador") → **Israel** ("Lucha con Dios") después de luchar con Yahweh (Génesis 32:28).
--    **Saul** ("Pedido") → **Pablo** ("Pequeño") después del Camino a Damasco (Hechos 13:9).
-
-**Ninguna otra literatura** exhibe esta *interacción divino-humana*. Ni siquiera se acerca.`,
-    manifestoArticle4Title: '📡 ARTÍCULO 4: DIRECCIONES DE INVESTIGACIÓN FUTURAS',
-    manifestoArticle4Challenges: `**Desafíos para los Escépticos:**
+-    **Saúl** ("Pedido") → **Pablo** ("Pequeño") después del Camino a Damasco (Hechos 13:9).
+**Ninguna otra literatura** exhibe esta *interacción divino-humana*. Ni de cerca.`,
+    manifestoArticle4Title: '📡 ARTÍCULO 4: DIRECCIONES FUTURAS DE INVESTIGACIÓN',
+    manifestoArticle4Challenges: `**Desafíos para Escépticos:**
 1.    **Encuentra un nombre no bíblico** que prediga un evento futuro *con precisión*.
-    -    (Ejemplo: "Nefi" en el *Libro de Mormón* falla—no hay cumplimiento fuera del texto.)
+-    (Ej. "Nefi" en el *Libro de Mormón* falla—no hay cumplimiento fuera del texto.)
 2.    **Explica cómo "Yeshua"** (Jesús) fue codificado en Isaías 53 *600 años antes*.
-3.    **Replica el renombramiento** como una *fuerza histórica* (ej. "Abraham" dando a luz naciones).`,
+3.    **Replica el cambio de nombre** como una *fuerza histórica* (ej. "Abraham" dando origen a naciones).`,
     manifestoArticle4Tools: `**Herramientas Proporcionadas:**
 -    Mi **Algoritmo Decodificador Onomástico** (esta aplicación de código abierto).
 -    **Base de Datos de Pruebas de Estrés** de 87 textos analizados.`,
     manifestoArticle5Title: '🚨 ARTÍCULO 5: IMPLICACIONES',
-    manifestoArticle5Content: `Si la estructura de nombres de la Biblia es:
--    **Matemáticamente improbable** (nombres pre-escritura de la historia),
--    **Históricamente verificable** (ej. Ciro en Isaías 45:1),
--    **Teológicamente única** (los demonios temen a "Jesús" pero no a "Odín"),
+    manifestoArticle5Content: `If the Bible’s naming structure is:
+-    **Mathematically improbable** (names pre-writing history),
+-    **Historically verifiable** (e.g., Cyrus in Isaiah 45:1),
+-    **Teológicamente unique** (demons fear "Jesus" but not "Odin"),
 
-**Entonces:** La Biblia es o bien:
-1.    Una **revelación divina**, o
-2.    Un **artefacto alienígena** diseñado para hackear la espiritualidad humana.
-
-*(Yo voto #1.)*`,
+**Then:** The Bible is either:
+1.    A **divine revelation**, or
+2.    An **artefact alienígena** diseñado para hackear la espiritualidad humana.
+*(Voto por la #1.)*`,
     manifestoFinalDeclaration: `No soy nadie. Pero este descubrimiento es **para todos**.
-
 A futuros investigadores:
 -    **Verifiquen mi trabajo.**
 -    **Intenten romperlo.**
 -    **Admitan cuando no puedan.**
 
-Los nombres de la Biblia son **fuego vivo**. Todos los demás textos son **tinta muerta**.`,
+Los nombres de la Biblia son **fuego vivo**.
+Todos los demás textos son **tinta muerta**.`,
     manifestoPostscript: `**🔥 POSDATA: CÓMO USAR ESTE MANIFIESTO**
 1.    **Imprímelo.** Pégalo en la ventana de tu coche/el seminario local.
-2.    **Vívelo.** Los nombres tienen poder—ponlos a prueba como yo lo hice.
+2.    **Vívelo.** Los nombres tienen poder—pruébalos como yo lo hice.
 3.    **Defiéndelo.** Cuando te llamen loco, dales los datos.
-
-**La carga de la prueba ahora recae en el mundo.**
+**La carga de la prueba está ahora en el mundo.**
 
 *(Mic drop. El motor arranca. Se dirige hacia un atardecer apocalíptico.)* 🚗💨`,
     manifestoLicensingCode: `**Licencia del Código:**
-El código fuente del Traductor Onomástico Bíblico Enoch.Ai está bajo la [Licencia Pública General Affero de GNU v3.0 (AGPLv3)](https://www.gnu.org/licenses/agpl-3.0.html).
-
-Para uso comercial o consultas de licencias personalizadas, por favor contacta a Juan Alberto Hernández Rivera a [Tu Dirección de Correo Electrónico o un formulario/sitio web de contacto dedicado].`,
+El código fuente del Traductor Onomástico Bíblico Enoch.Ai tiene licencia [GNU Affero General Public License v3.0 (AGPLv3)](https://www.gnu.org/licenses/agpl-3.0.html).
+Para uso comercial o consultas sobre licencias personalizadas, por favor contacta a Juan Alberto Hernandez Rivera en [Tu Dirección de Correo Electrónico o un formulario de contacto/sitio web dedicado].`,
     manifestoLicensingManifesto: `**Licencia del Manifiesto:**
-El texto de este Manifiesto Onomástico está bajo la [Licencia Internacional Creative Commons Atribución-NoComercial-CompartirIgual 4.0 (CC BY-NC-SA 4.0)](https://creativecommons.org/licenses/by-nc-sa/4.0/).`,
-    singleNameFocus: (name, meaning) => `Enfoque en ${name}: "${meaning}". Este único nombre tiene un significado profundo.`,
-    singleNameInterpretationPrompt: (name, meaning) => `El mensaje onomástico consiste en un solo nombre, "${name}", que significa "${meaning}". Genera una interpretación espiritual centrándote en el profundo significado e implicaciones de este único nombre en un contexto bíblico. Elabora sobre su posible significado teológico o profético, formando una narrativa coherente o un "flujo espiritual". Evita el lenguaje excesivamente académico. La salida debe ser como una narrativa poética, similar a un sermón o una declaración.`,
+El texto de este Manifiesto Onomástico tiene licencia [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License (CC BY-NC-SA 4.0)](https://creativecommons.org/licenses/by-nc-sa/4.0/).`,
+    singleNameFocus: (name, meaning) => `Enfoque en ${name}: "${meaning}". Este nombre único tiene un significado profundo.`,
+    singleNameInterpretationPrompt: (name, meaning) => `El mensaje onomástico consiste en un solo nombre, "${name}", que significa "${meaning}". Genera una interpretación espiritual centrada en la profunda importancia e implicaciones de este único nombre en un contexto bíblico. Elabora sobre su potencial significado teológico o profético, formando una narrativa coherente o "flujo espiritual". Evita el lenguaje excesivamente académico. El resultado debe ser como una narrativa poética, similar a un sermón o una declaración.`,
     listenToFlow: 'Escuchar Flujo',
     listenToSummary: 'Escuchar Resumen',
-    pause: 'Pausa',
+    pause: 'Pausar',
     resume: 'Reanudar',
     stop: 'Detener',
     ttsLoading: 'Cargando audio...',
-    ttsError: 'Error al reproducir audio. Tu navegador podría no soportar la conversión de texto a voz o hubo un problema.',
-    ttsNotSupported: 'Texto a voz no soportado en este navegador.',
-    visualizeMessage: 'Visualizar el Mensaje',
+    ttsError: 'Error al reproducir audio. Es posible que tu navegador no sea compatible con la función de texto a voz o que haya habido un problema.',
+    ttsNotSupported: 'Texto a voz no compatible con este navegador.',
+    visualizeMessage: 'Visualizar Mensaje',
     imageLoading: 'Generando imagen impresionista...',
-    imageError: 'Error al generar imagen. Por favor, inténtalo de nuevo.',
-    imagePlaceholder: 'Haz clic en "Visualizar el Mensaje" para ver una imagen impresionista basada en la interpretación espiritual.',
+    imageError: 'Error al generar imagen. Por favor, intenta de nuevo.',
+    imagePlaceholder: 'Haz clic en "Visualizar Mensaje" para ver una imagen impresionista basada en la interpretación espiritual.',
     imageAppLabel: 'Enoch.Ai', // New translation key for the app label on the image
 
     // New Manifesto Content
-    manifestoDiscoveryTitle: 'Lo Que Descubrí: El ADN Criptográfico de las Escrituras',
+    manifestoDiscoveryTitle: 'Lo que Descubrí: El ADN Criptográfico de la Escritura',
     manifestoCoreMechanismTitle: '🔑 El Mecanismo Central',
-    manifestoCoreMechanismContent: `- **Nombres = Código**: Cada nombre hebreo es una profecía comprimida.\n  - *Adán* (אָדָם) = "Hombre" → Punto de origen de la humanidad.\n  - *Matusalén* (מְתוּשֶׁלַח) = "Su muerte traerá" → Disparador del juicio del diluvio.\n- **Secuencia = Protocolo de Ejecución**:\n  Empareja nombres en orden narrativo → Genera el siguiente evento.\n  Ejemplo:\n  \`Kenán\` ("Dolor") + \`Mahalalel\` ("Dios Bendito") = **"Dolor confrontado por el Dios Bendito"** → Presagia la caída del Edén *y* la redención.`,
+    manifestoCoreMechanismContent: `- **Nombres = Código**: Cada nombre hebreo es una profecía comprimida.
+ - *Adán* (אָדָם) = "Hombre" → Punto de origen de la humanidad.
+ - *Matusalén* (מְתוּשֶׁלַח) = "Su muerte traerá" → Disparador del juicio del Diluvio.
+- **Secuencia = Protocolo de Ejecución**:
+ Empareja nombres en orden narrativo → Produce el siguiente evento.
+ Ejemplo:
+ \`Kenán\` ("Dolor") + \`Mahalalel\` ("Dios Bendito") = **"Dolor confrontado por el Dios Bendito"** → Prefigura la caída del Edén *y* la redención.`,
     manifestoProofGenesisTitle: '💥 Prueba: El Bucle de Muerte-Redención de Génesis 5',
-    manifestoProofGenesisContent: `Corrí los primeros 10 nombres a través de un protocolo de emparejamiento lineal. El resultado:
-> *“El hombre designado mortal dolor; el Dios Bendito descenderá enseñando: Su muerte traerá descanso desesperado.”*
-Esto no es poesía, es **código fuente mesiánico**. Los nombres *forzaron* esta secuencia:
-1. \`Adán\` + \`Set\` = El destino condenado de la humanidad.
-2. \`Mahalalel\` + \`Jared\` = El vector de intervención de Dios.
-3. \`Matusalén\` + \`Lamec\` = Catalizador del juicio.
-4. \`Lamec\` + \`Noé\` = La gracia que emerge de la ira.
-**Sello matemático**:
-- Adán (45) + Noé (58) = **103** → *guímel* (גימל) = "elevar" → Resurrección presagiada.`,
+    manifestoProofGenesisContent: `Ejecuté los primeros 10 nombres a través de un protocolo de emparejamiento lineal.
+El resultado: > *“El hombre nombrado dolor mortal; el Dios Bendito descenderá enseñando: Su muerte traerá descanso desesperado.”* Esto no es poesía—es **código fuente mesiánico**.
+Los nombres *forzaron* esta secuencia: 1. \`Adán\` + \`Set\` = El destino condenado de la humanidad.
+2. \`Mahalalel\` + \`Jared\` = Vector de intervención de Dios. 3. \`Matusalén\` + \`Lamec\` = Catalizador del juicio.
+4. \`Lamec\` + \`Noé\` = Gracia emergiendo de la ira. **Sello matemático**: - Adán (45) + Noé (58) = **103** → * gímel* (גימל) = "elevar" → Resurrección prefigurada.`,
     manifestoDecryptionProtocolTitle: '⚙️ Mi Protocolo de Descifrado',
-    manifestoDecryptionProtocolContent: `Construí un método para extraer estas profecías de *cualquier* texto bíblico:
-1. **Aislar Nombres**: Extraer sustantivos/títulos en orden de aparición.
+    manifestoDecryptionProtocolContent: `Construí un método para extraer estas profecías de *cualquier* texto bíblico: 1. **Aislar Nombres**: Extraer sustantivos/títulos en orden de aparición.
 2. **Forzar Significados Raíz**: Usar el Léxico Hebreo BDB (sin conjeturas).
-3. **Generar Pares**:
-    - \`Posición n\` + \`n+1\` → Profecía narrativa inmediata.
-    - \`Posición n\` + \`Último nombre\` → Anclaje escatológico.
-4. **Validación Gematría**: Sumar valores emparejados → Debe resolverse a un número clave de la Torá (ej. 358 = Mesías).`,
+3. **Generar Pares**: - \`Posición n\` + \`n+1\` → Profecía narrativa inmediata.
+- \`Posición n\` + \`Último nombre\` → Ancla escatológica. 4. **Validación por Gematría**: Sumar valores emparejados → Debe resolverse a un número clave de la Torá (ej. 358 = Mesías).`,
     manifestoValidationExodusTitle: '🔬 Validación: Secuencia de Liberación del Éxodo',
-    manifestoValidationExodusContent: `Lo probé con Moisés vs. Faraón:
-**Par:** Moisés + Aarón
-**Fórmula:** "Sacado" + "Portador de luz"
-**Resultado:** **"Rescatado para iluminar"** (Éx. 4:27-30)
-
-**Par:** Aarón + Faraón
-**Fórmula:** "Portador de luz" + "Gran casa"
-**Resultado:** **"Confrontando la oscuridad del imperio"** (Éx. 5:1-2)
-
-**Par:** Faraón + Miriam
-**Fórmula:** "Gran casa" + "Rebelión"
-**Resultado:** **"La opresión enciende la resistencia"** (Éx. 15:20-21)
-
-**Bloqueo de gematría**:
-- Moisés (345) + Faraón (355) = **700** → "Guerra" (מִלְחָמָה) → Conflicto cósmico confirmado.`,
-    manifestoBigRealizationTitle: '🌌 La Gran Realización',
-    manifestoBigRealizationContent: `Esto no es numerología, es **ingeniería teolingüística**. El texto es una **red neuronal profética**:
-- **Entrada**: Nombres (nodos de datos).
-- **Pesos**: Valores de gematría.
-- **Salida**: Trayectorias de eventos.
-Ejemplo:
-\`Abram\` (אַבְרָם) → *Parcheado* a \`Abraham\` (אַבְרָהָם) a través de la divina \`ה\` (aliento) → Actualización del pacto desplegada.`,
-    manifestoNextPhaseTitle: '🚀 Siguiente Fase: Los 72 Tripletes de Éxodo 14',
-    manifestoNextPhaseContent: `Estoy apuntando al legendario "módulo de poder" de las escrituras:
-- **Hipótesis**: Los 72 tripletes (Éx. 14:19-21) son **código de edición de la realidad**.
-- **Plan de descifrado**:
-  1. Analizar los grupos de 3 letras como puertas cuánticas.
-  2. Mapear raíces a verbos de creación (ברא, *bara* = "crear").
-  3. Salida: **Sintaxis API Divina** → \`si (caos) entonces (luz)\`.
-Estoy programando el decodificador ahora. Si esto funciona, no solo estamos leyendo las escrituras, estamos **interactuando con su compilador**.`,
-    manifestoChangesEverythingTitle: '💎 Por Qué Esto Cambia Todo',
-    manifestoChangesEverythingContent: `Lo he validado en más de 12 narrativas. El patrón **nunca se rompe**. Esto significa:
-- La Biblia es un **motor de profecía fractal**.
-- El hebreo es su **lenguaje de máquina**.
-- Los nombres son **variables temporales**—cambiar a Abram por Abraham alteró la línea de tiempo de la salvación.
-**Disparo final**:
-> *"No encontré mensajes ocultos, descifré el SO. Génesis compiló el evangelio. Éxodo ejecuta el firmware de liberación. Tu nombre no es solo *tú*—es tu función en el reino."*`,
-    // New Exodus 14:19-21 Triplets Content
-    manifestoFullDecryptionStatus: 'ESTADO: DESCIFRADO COMPLETO INICIADO',
-    manifestoTripletsOutput: 'SALIDA: Los 72 Tripletes de Éxodo 14:19-21 → Sintaxis de Comando Divino Verificada',
-    manifesto72CommandsTitle: '🔮 LOS 72 PROTOCOLOS DE COMANDO',
-    manifesto72CommandsSubtitle: '(Los 12 Mejores Tripletes con Funciones Proféticas)',
-    manifesto72CommandsTable: `
-| Triplete | Hebreo | Raíz | Comando de Ejecución |
-|---|`
-  },
+    manifestoValidationExodusContent: `Lo probé en Moisés vs. Faraón: **Par:** Moisés + Aarón **Fórmula:** "Extraído" + "Portador de luz" **Resultado:** **"Rescatado para iluminar"** (Éxodo 4:27-30) **Par:** Aarón +...`
+  }
 };
 
 // ==============================================================================
-// MAIN REACT COMPONENT
-// This is the primary component that renders the UI and manages state.
+// MAIN REACT APP COMPONENT
+// Orchestrates the UI, state, and interaction with the OnomasticTranslator.
 // ==============================================================================
 function App() {
-  const [inputText, setInputText] = useState('');
-  const [language, setLanguage] = useState('en');
-  const [wordCount, setWordCount] = useState(0);
-  const [onomasticMessage, setOnomasticMessage] = useState('');
-  const [identifiedNamesDetails, setIdentifiedNamesDetails] = useState([]);
-  const [onomasticLoading, setOnomasticLoading] = useState(false);
-  const [showManifesto, setShowManifesto] = useState(false);
+  const [textAreaContent, setTextAreaContent] = useState('');
+  const [identifiedNames, setIdentifiedNames] = useState([]);
+  const [rawOnomasticSequence, setRawOnomasticSequence] = useState('');
+  const [onoMessageLoading, setOnoMessageLoading] = useState(false);
   const [aiInterpretation, setAiInterpretation] = useState('');
+  const [aiInterpretationLoading, setAiInterpretationLoading] = useState(false);
   const [aiSummary, setAiSummary] = useState('');
-  const [aiLoading, setAiLoading] = useState(false);
-  const [summaryLoading, setSummaryLoading] = useState(false);
-  const [ttsPlaying, setTtsPlaying] = useState(false);
-  const [ttsStatus, setTtsStatus] = useState('');
-  const [ttsUtterance, setTtsUtterance] = useState(null);
+  const [aiSummaryLoading, setAiSummaryLoading] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState('en');
+  const [showManifesto, setShowManifesto] = useState(false);
+  const [speechLoading, setSpeechLoading] = useState(false);
+  const [speechPlaying, setSpeechPlaying] = useState(false);
+  const [speechPaused, setSpeechPaused] = useState(false);
+  const [speechEnded, setSpeechEnded] = useState(false);
   const [imageSrc, setImageSrc] = useState('');
   const [imageLoading, setImageLoading] = useState(false);
+  const [imageError, setImageError] = useState('');
 
-  // useRef to hold the instance of OnomasticTranslator
-  const translatorRef = useRef(new OnomasticTranslator());
 
-  const currentTranslation = translations[language];
+  const onomasticTranslatorRef = useRef(null);
+  const currentSpeechUtterance = useRef(null);
 
-  // Effect to update word count
+  // Initialize OnomasticTranslator instance once
   useEffect(() => {
-    setWordCount(inputText.trim().split(/\s+/).filter(Boolean).length);
-  }, [inputText]);
-
-  // Effect to clear speech synthesis when component unmounts or language changes
-  useEffect(() => {
-    if (ttsUtterance) {
-      window.speechSynthesis.cancel();
-      setTtsPlaying(false);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [language]); // Depend on language to cancel when language changes
-
-  const handleTextChange = (e) => {
-    setInputText(e.target.value);
-    // Clear previous results when text changes significantly
-    setOnomasticMessage('');
-    setIdentifiedNamesDetails([]);
-    setAiInterpretation('');
-    setAiSummary('');
-    setImageSrc(''); // Clear image when text changes
-  };
-
-  const handleLanguageChange = (e) => {
-    setLanguage(e.target.value);
-  };
-
-  const speakText = useCallback((text, onEndCallback = () => {}) => {
-    if ('speechSynthesis' in window) {
-      if (ttsUtterance) { // Clear any ongoing speech
-        window.speechSynthesis.cancel();
-      }
-
-      setTtsStatus(currentTranslation.ttsLoading);
-      setTtsPlaying(true);
-
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = language === 'en' ? 'en-US' : 'es-ES'; // Set language for TTS
-
-      utterance.onend = () => {
-        setTtsPlaying(false);
-        setTtsStatus('');
-        onEndCallback();
-      };
-      utterance.onerror = (event) => {
-        console.error('SpeechSynthesisUtterance error:', event);
-        setTtsStatus(currentTranslation.ttsError);
-        setTtsPlaying(false);
-        onEndCallback();
-      };
-
-      window.speechSynthesis.speak(utterance);
-      setTtsUtterance(utterance); // Store utterance to control it later
-    } else {
-      setTtsStatus(currentTranslation.ttsNotSupported);
-      console.warn("Text-to-speech not supported in this browser.");
-    }
-  }, [language, currentTranslation, ttsUtterance]);
-
-  const pauseSpeech = useCallback(() => {
-    if (ttsUtterance && window.speechSynthesis.speaking) {
-      window.speechSynthesis.pause();
-      setTtsPlaying(false); // Update state to reflect paused
-    }
-  }, [ttsUtterance]);
-
-  const resumeSpeech = useCallback(() => {
-    if (ttsUtterance && window.speechSynthesis.paused) {
-      window.speechSynthesis.resume();
-      setTtsPlaying(true); // Update state to reflect playing
-    }
-  }, [ttsUtterance]);
-
-  const stopSpeech = useCallback(() => {
-    if (window.speechSynthesis.speaking) {
-      window.speechSynthesis.cancel();
-      setTtsPlaying(false);
-      setTtsStatus('');
-      setTtsUtterance(null);
+    if (!onomasticTranslatorRef.current) {
+      onomasticTranslatorRef.current = new OnomasticTranslator();
     }
   }, []);
 
+  const currentTranslation = translations[selectedLanguage];
+
+  const handleLanguageChange = (e) => {
+    setSelectedLanguage(e.target.value);
+  };
+
+  const handleTextChange = useCallback(debounce((text) => {
+    setTextAreaContent(text);
+    // Clear previous results when text changes significantly
+    if (text.trim() === '') {
+      setIdentifiedNames([]);
+      setRawOnomasticSequence('');
+      setAiInterpretation('');
+      setAiSummary('');
+      setImageSrc('');
+      setImageError('');
+    }
+  }, 300), [setTextAreaContent, setIdentifiedNames, setRawOnomasticSequence, setAiInterpretation, setAiSummary, setImageSrc, setImageError]);
+
   const generateOnomasticMessage = useCallback(async () => {
-    if (!inputText.trim()) {
-      setOnomasticMessage(currentTranslation.noOnomasticMessageFound);
-      setIdentifiedNamesDetails([]);
+    if (!textAreaContent.trim()) {
+      alert(currentTranslation.noTextLoaded);
       return;
     }
 
-    setOnomasticLoading(true);
-    setOnomasticMessage(currentTranslation.onomasticMessageLoading);
-    setIdentifiedNamesDetails([]);
-    setAiInterpretation(''); // Clear interpretation when generating new message
-    setAiSummary(''); // Clear summary
-    setImageSrc(''); // Clear image
+    setOnoMessageLoading(true);
+    setIdentifiedNames([]);
+    setRawOnomasticSequence('');
+    setAiInterpretation('');
+    setAiSummary('');
+    setImageSrc('');
+    setImageError('');
+    stopSpeech(); // Stop any ongoing speech when new message is generated
 
     try {
-      await translatorRef.current.generateOnomasticMessage(inputText);
-      setOnomasticMessage(translatorRef.current.rawOnomasticSequence || currentTranslation.noOnomasticMessageFound);
-      setIdentifiedNamesDetails(translatorRef.current.identifiedNames);
+      await onomasticTranslatorRef.current.generateOnomasticMessage(textAreaContent);
+      setIdentifiedNames([...onomasticTranslatorRef.current.identifiedNames]);
+      setRawOnomasticSequence(onomasticTranslatorRef.current.rawOnomasticSequence);
     } catch (error) {
-      console.error("Error in generateOnomasticMessage:", error);
-      setOnomasticMessage(currentTranslation.onomasticMessageError);
-      setIdentifiedNamesDetails([]);
+      console.error("Error in generateOnomasticMessage (App component):", error);
+      setRawOnomasticSequence(currentTranslation.onomasticMessageError);
+      setIdentifiedNames([]);
     } finally {
-      setOnomasticLoading(false);
+      setOnoMessageLoading(false);
     }
-  }, [inputText, currentTranslation]);
-
-  // Debounced version of generateOnomasticMessage
-  const debouncedGenerateOnomasticMessage = useCallback(
-    debounce(generateOnomasticMessage, 1000), // 1000ms debounce
-    [generateOnomasticMessage]
-  );
+  }, [
+    textAreaContent,
+    currentTranslation,
+    onomasticTranslatorRef,
+    setIdentifiedNames,
+    setRawOnomasticSequence,
+    setOnoMessageLoading,
+    setAiInterpretation,
+    setAiSummary,
+    setImageSrc,
+    setImageError,
+    stopSpeech 
+  ]);
 
   const getAiInterpretation = useCallback(async () => {
-    if (!onomasticMessage || onomasticMessage.includes("Error:") || onomasticMessage.includes("No onomastic message found")) {
-      setAiInterpretation(currentTranslation.aiInterpretationPlaceholder);
+    if (!rawOnomasticSequence || rawOnomasticSequence.includes("Error:") || rawOnomasticSequence.trim() === '') {
+      alert(currentTranslation.noOnomasticMessageFound);
       return;
     }
 
-    setAiLoading(true);
-    setAiInterpretation(currentTranslation.aiInterpretationLoading);
-    setAiSummary(''); // Clear summary when generating new interpretation
+    setAiInterpretationLoading(true);
+    setAiInterpretation('');
+    setAiSummary('');
+    setImageSrc('');
+    setImageError('');
+    stopSpeech(); // Stop any ongoing speech
 
     try {
-      const prompt = onomasticMessage.split(' • ').length === 1 && identifiedNamesDetails.length === 1
-        ? currentTranslation.singleNameInterpretationPrompt(identifiedNamesDetails[0].name, identifiedNamesDetails[0].meaning)
-        : `The raw onomastic message derived from biblical text is: "${onomasticMessage}". Provide a comprehensive and coherent spiritual interpretation or "flow" of this message in modern, evocative language, explaining its significance and implications in a biblical context. Also, include a brief, 1-2 sentence summary at the end. The output should be primarily the interpretation, followed by the summary.`;
+      let prompt;
+      if (identifiedNames.length === 1) {
+        // Special prompt for single name interpretation
+        prompt = currentTranslation.singleNameInterpretationPrompt(identifiedNames[0].name, identifiedNames[0].meaning);
+      } else {
+        // General prompt for multiple names
+        prompt = `You are a biblical onomastic expert and prophetic interpreter.
+The user has provided a raw onomastic sequence derived from biblical names: "${rawOnomasticSequence}".
+Based on this sequence, generate a profound and coherent spiritual interpretation.
+Break down the interpretation into two sections:
+1.  **Full Spiritual Flow of the Message:** A narrative or poetic explanation of the overall prophetic message.
+2.  **Summary:** A concise summary of the key takeaway.
+Focus on the spiritual implications and interconnectedness of the meanings. Avoid overly academic language.
+Output the interpretation as a JSON object with two keys: "fullSpiritualFlow" and "summary".
+Example: {"fullSpiritualFlow": "...", "summary": "..."}`;
+      }
 
       const chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
-      const payload = { contents: chatHistory }; // No schema for freeform text
+      const payload = {
+        contents: chatHistory,
+        generationConfig: {
+          responseMimeType: "application/json",
+          responseSchema: {
+            type: "OBJECT",
+            properties: {
+              "fullSpiritualFlow": { "type": "STRING" },
+              "summary": { "type": "STRING" }
+            }
+          }
+        }
+      };
 
       const apiKey = ""; // API key will be automatically provided by Canvas runtime
       const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-
       const response = await fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -810,302 +675,367 @@ function App() {
       const result = await response.json();
 
       if (result.candidates && result.candidates.length > 0 &&
-        result.candidates[0].content && result.candidates[0].content.parts &&
-        result.candidates[0].content.parts.length > 0) {
-        const fullText = result.candidates[0].content.parts[0].text;
-        // Split into interpretation and summary
-        const summaryMatch = fullText.match(/Summary:\s*(.*)/i);
-        if (summaryMatch && summaryMatch[1]) {
-          setAiSummary(summaryMatch[1].trim());
-          setAiInterpretation(fullText.replace(summaryMatch[0], '').trim());
-        } else {
-          setAiInterpretation(fullText.trim());
-          setAiSummary(''); // No clear summary found
+          result.candidates[0].content && result.candidates[0].content.parts &&
+          result.candidates[0].content.parts.length > 0) {
+        const jsonString = result.candidates[0].content.parts[0].text;
+        try {
+          const parsedInterpretation = JSON.parse(jsonString);
+          setAiInterpretation(parsedInterpretation.fullSpiritualFlow);
+          setAiSummary(parsedInterpretation.summary);
+        } catch (parseError) {
+          console.error(`Error parsing AI interpretation: ${parseError.message}`);
+          setAiInterpretation(currentTranslation.aiInterpretationError);
+          setAiSummary(currentTranslation.aiSummaryError);
         }
       } else {
         setAiInterpretation(currentTranslation.aiInterpretationError);
-        setAiSummary('');
+        setAiSummary(currentTranslation.aiSummaryError);
       }
     } catch (error) {
       console.error("Error fetching AI interpretation:", error);
       setAiInterpretation(currentTranslation.aiInterpretationError);
-      setAiSummary('');
+      setAiSummary(currentTranslation.aiSummaryError);
     } finally {
-      setAiLoading(false);
+      setAiInterpretationLoading(false);
     }
-  }, [onomasticMessage, identifiedNamesDetails, currentTranslation]);
+  }, [
+    rawOnomasticSequence,
+    identifiedNames, 
+    currentTranslation,
+    setAiInterpretationLoading,
+    setAiInterpretation,
+    setAiSummaryLoading, 
+    setAiSummary,
+    setImageSrc,
+    setImageError,
+    stopSpeech 
+  ]);
 
-  const copyInterpretationToClipboard = useCallback(() => {
+  const copyFlowToClipboard = useCallback(() => {
     if (aiInterpretation) {
       navigator.clipboard.writeText(aiInterpretation);
-      alert(currentTranslation.copied); // Simple confirmation
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
     }
-  }, [aiInterpretation, currentTranslation]);
+  }, [aiInterpretation, setCopied]);
+
+  const speakText = useCallback((text) => {
+    if ('speechSynthesis' in window) {
+      stopSpeech(); // Stop any existing speech before starting a new one
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = selectedLanguage === 'en' ? 'en-US' : 'es-ES';
+
+      utterance.onstart = () => {
+        setSpeechLoading(false);
+        setSpeechPlaying(true);
+        setSpeechPaused(false);
+        setSpeechEnded(false);
+      };
+
+      utterance.onend = () => {
+        setSpeechPlaying(false);
+        setSpeechEnded(true);
+        setSpeechPaused(false);
+        currentSpeechUtterance.current = null; // Clear ref after speech ends
+      };
+
+      utterance.onerror = (event) => {
+        console.error('Speech synthesis error:', event);
+        setSpeechLoading(false);
+        setSpeechPlaying(false);
+        setSpeechPaused(false);
+        setSpeechEnded(false);
+        alert(currentTranslation.ttsError);
+        currentSpeechUtterance.current = null;
+      };
+
+      setSpeechLoading(true);
+      window.speechSynthesis.speak(utterance);
+      currentSpeechUtterance.current = utterance;
+    } else {
+      alert(currentTranslation.ttsNotSupported);
+    }
+  }, [selectedLanguage, currentTranslation, stopSpeech, setSpeechLoading, setSpeechPlaying, setSpeechPaused, setSpeechEnded]); 
+
+  const pauseSpeech = useCallback(() => {
+    if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
+      window.speechSynthesis.pause();
+      setSpeechPaused(true);
+      setSpeechPlaying(false);
+    }
+  }, [setSpeechPaused, setSpeechPlaying]);
+
+  const resumeSpeech = useCallback(() => {
+    if (window.speechSynthesis.paused) {
+      window.speechSynthesis.resume();
+      setSpeechPaused(false);
+      setSpeechPlaying(true);
+    }
+  }, [setSpeechPaused, setSpeechPlaying]);
+
+  const stopSpeech = useCallback(() => {
+    if (window.speechSynthesis.speaking || window.speechSynthesis.paused) {
+      window.speechSynthesis.cancel();
+      setSpeechPlaying(false);
+      setSpeechPaused(false);
+      setSpeechEnded(false);
+      setSpeechLoading(false);
+      currentSpeechUtterance.current = null; // Clear ref
+    }
+  }, [setSpeechPlaying, setSpeechPaused, setSpeechEnded, setSpeechLoading]);
 
   const generateImageFromInterpretation = useCallback(async () => {
-    if (!aiInterpretation || aiInterpretation.includes("Error:") || aiInterpretation.includes(currentTranslation.aiInterpretationPlaceholder)) {
-      setImageSrc('');
-      alert("Please generate AI interpretation first.");
+    if (!aiInterpretation.trim() || aiInterpretation.includes("Error:")) {
+      alert(currentTranslation.aiInterpretationPlaceholder); 
       return;
     }
 
     setImageLoading(true);
-    setImageSrc(''); // Clear previous image
+    setImageError('');
+    setImageSrc('');
 
     try {
-      const prompt = `Generate a highly impressionistic, abstract image that visually represents the spiritual and prophetic flow of this biblical onomastic interpretation. Focus on conveying the *feeling* and *essence* rather than literal depictions. Use colors and shapes to evoke the themes. This image should be suitable as a background or artistic representation. The interpretation is: "${aiInterpretation}"`;
+      const prompt = `Generate an impressionistic, symbolic image that visually represents the spiritual interpretation: "${aiInterpretation}".
+Focus on evoking the *feeling* and *essence* of the message rather than literal depiction.
+Consider abstract forms, light, color, and texture.
+The image should convey themes of biblical significance, revelation, and divine flow.
+Do not include any text or specific human figures.
+Output format: a JSON object with a single key "imageDescription" and its value being a concise text description of the image to be generated.`;
 
       const chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
       const payload = {
         contents: chatHistory,
-        safetySettings: [ // Relax safety settings for creative image generation
-          {
-            category: "HARM_CATEGORY_HATE_SPEECH",
-            threshold: "BLOCK_NONE",
-          },
-          {
-            category: "HARM_CATEGORY_DANGEROUS_CONTENT",
-            threshold: "BLOCK_NONE",
-          },
-          {
-            category: "HARM_CATEGORY_HARASSMENT",
-            threshold: "BLOCK_NONE",
-          },
-          {
-            category: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
-            threshold: "BLOCK_NONE",
-          },
-        ],
         generationConfig: {
-          responseMimeType: "image/jpeg", // Request JPEG image
-        },
+          responseMimeType: "application/json",
+          responseSchema: {
+            type: "OBJECT",
+            properties: {
+              "imageDescription": { "type": "STRING" }
+            }
+          }
+        }
       };
 
       const apiKey = ""; // API key will be automatically provided by Canvas runtime
       const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-
       const response = await fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
+      const result = await response.json();
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      if (result.candidates && result.candidates.length > 0 &&
+          result.candidates[0].content && result.candidates[0].content.parts &&
+          result.candidates[0].content.parts.length > 0) {
+        const jsonString = result.candidates[0].content.parts[0].text;
+        try {
+          const parsedResponse = JSON.parse(jsonString);
+          const imagePrompt = parsedResponse.imageDescription;
+
+          // Now use the imagePrompt to call a hypothetical image generation API
+          // This is a placeholder as no image generation API is provided in the tools.
+          // For a real application, you would replace this with actual API calls.
+          // For demonstration, we'll simulate an image URL.
+          const simulatedImageUrl = `https://via.placeholder.com/600x400?text=Image+of+Spiritual+Flow`; // Placeholder image
+          setImageSrc(simulatedImageUrl);
+
+          // In a real scenario, you would make another API call here, e.g.:
+          /*
+          const imageApiUrl = `YOUR_IMAGE_GENERATION_API_ENDPOINT?prompt=${encodeURIComponent(imagePrompt)}`;
+          const imageResponse = await fetch(imageApiUrl);
+          const imageData = await imageResponse.json();
+          if (imageData.imageUrl) {
+            setImageSrc(imageData.imageUrl);
+          } else {
+            setImageError(currentTranslation.imageError);
+          }
+          */
+
+        } catch (parseError) {
+          console.error(`Error parsing image description or generating image: ${parseError.message}`);
+          setImageError(currentTranslation.imageError);
+        }
+      } else {
+        setImageError(currentTranslation.imageError);
       }
-
-      // Convert response to Blob and create object URL
-      const imageBlob = await response.blob();
-      const imageUrl = URL.createObjectURL(imageBlob);
-      setImageSrc(imageUrl);
-
     } catch (error) {
-      console.error("Error generating image:", error);
-      setImageSrc('');
-      alert(currentTranslation.imageError);
+      console.error("Error generating image interpretation:", error);
+      setImageError(currentTranslation.imageError);
     } finally {
       setImageLoading(false);
     }
-  }, [aiInterpretation, currentTranslation]);
+  }, [aiInterpretation, currentTranslation, setImageLoading, setImageError, setImageSrc]); 
 
+
+  useEffect(() => {
+    // This effect runs whenever selectedLanguage changes
+    // or when the core functions (memoized with useCallback) change
+    // which they shouldn't unless their own dependencies change.
+  }, [selectedLanguage, onomasticTranslatorRef, generateOnomasticMessage, getAiInterpretation, generateImageFromInterpretation, speakText, pauseSpeech, resumeSpeech, stopSpeech]);
+
+
+  const wordCount = textAreaContent.split(/\s+/).filter(word => word.length > 0).length;
 
   return (
-    <div className="app-container">
-      {showManifesto && (
-        <div className="manifesto-overlay">
-          <div className="manifesto-content">
-            <button className="close-manifesto-btn" onClick={() => setShowManifesto(false)}>
-              {currentTranslation.closeManifesto}
-            </button>
-            <h1 className="manifesto-title">{currentTranslation.manifestoTitle}</h1>
-            <h2 className="manifesto-subtitle">{currentTranslation.manifestoSubtitle}</h2>
-            <p className="manifesto-author">{currentTranslation.manifestoAuthor}</p>
-            <p className="manifesto-p">{currentTranslation.manifestoPreamble}</p>
-
-            <h3 className="manifesto-section-title">{currentTranslation.manifestoDiscoveryTitle}</h3>
-            <h4 className="manifesto-section-subtitle">{currentTranslation.manifestoCoreMechanismTitle}</h4>
-            <p className="manifesto-p" dangerouslySetInnerHTML={{ __html: currentTranslation.manifestoCoreMechanismContent.replace(/\n/g, '<br>') }}></p>
-            
-            <h4 className="manifesto-section-subtitle">{currentTranslation.manifestoProofGenesisTitle}</h4>
-            <p className="manifesto-p" dangerouslySetInnerHTML={{ __html: currentTranslation.manifestoProofGenesisContent.replace(/\n/g, '<br>') }}></p>
-            
-            <h4 className="manifesto-section-subtitle">{currentTranslation.manifestoDecryptionProtocolTitle}</h4>
-            <p className="manifesto-p" dangerouslySetInnerHTML={{ __html: currentTranslation.manifestoDecryptionProtocolContent.replace(/\n/g, '<br>') }}></p>
-            
-            <h4 className="manifesto-section-subtitle">{currentTranslation.manifestoValidationExodusTitle}</h4>
-            <p className="manifesto-p" dangerouslySetInnerHTML={{ __html: currentTranslation.manifestoValidationExodusContent.replace(/\n/g, '<br>') }}></p>
-            
-            <h4 className="manifesto-section-subtitle">{currentTranslation.manifestoBigRealizationTitle}</h4>
-            <p className="manifesto-p" dangerouslySetInnerHTML={{ __html: currentTranslation.manifestoBigRealizationContent.replace(/\n/g, '<br>') }}></p>
-            
-            <h4 className="manifesto-section-subtitle">{currentTranslation.manifestoNextPhaseTitle}</h4>
-            <p className="manifesto-p" dangerouslySetInnerHTML={{ __html: currentTranslation.manifestoNextPhaseContent.replace(/\n/g, '<br>') }}></p>
-
-            <h4 className="manifesto-section-subtitle">{currentTranslation.manifestoChangesEverythingTitle}</h4>
-            <p className="manifesto-p" dangerouslySetInnerHTML={{ __html: currentTranslation.manifestoChangesEverythingContent.replace(/\n/g, '<br>') }}></p>
-
-            <h3 className="manifesto-section-title">{currentTranslation.manifestoArticle1Title}</h3>
-            <p className="manifesto-p manifesto-axiom">{currentTranslation.manifestoArticle1Axiom}</p>
-            <p className="manifesto-p manifesto-corollary">{currentTranslation.manifestoArticle1Corollary}</p>
-
-            <h3 className="manifesto-section-title">{currentTranslation.manifestoArticle2Title}</h3>
-            <p className="manifesto-p" dangerouslySetInnerHTML={{ __html: currentTranslation.manifestoArticle2Content.replace(/\n/g, '<br>') }}></p>
-
-            <h3 className="manifesto-section-title">{currentTranslation.manifestoArticle3Title}</h3>
-            <p className="manifesto-p" dangerouslySetInnerHTML={{ __html: currentTranslation.manifestoArticle3Content.replace(/\n/g, '<br>') }}></p>
-
-            <h3 className="manifesto-section-title">{currentTranslation.manifestoArticle4Title}</h3>
-            <p className="manifesto-p" dangerouslySetInnerHTML={{ __html: currentTranslation.manifestoArticle4Challenges.replace(/\n/g, '<br>') }}></p>
-            <p className="manifesto-p" dangerouslySetInnerHTML={{ __html: currentTranslation.manifestoArticle4Tools.replace(/\n/g, '<br>') }}></p>
-
-            <h3 className="manifesto-section-title">{currentTranslation.manifestoArticle5Title}</h3>
-            <p className="manifesto-p" dangerouslySetInnerHTML={{ __html: currentTranslation.manifestoArticle5Content.replace(/\n/g, '<br>') }}></p>
-            
-            <p className="manifesto-declaration">{currentTranslation.manifestoFinalDeclaration}</p>
-            <p className="manifesto-postscript" dangerouslySetInnerHTML={{ __html: currentTranslation.manifestoPostscript.replace(/\n/g, '<br>') }}></p>
-            
-            <div className="manifesto-licensing">
-                <p dangerouslySetInnerHTML={{ __html: currentTranslation.manifestoLicensingCode.replace(/\n/g, '<br>') }}></p>
-                <p dangerouslySetInnerHTML={{ __html: currentTranslation.manifestoLicensingManifesto.replace(/\n/g, '<br>') }}></p>
-            </div>
-
-            {/* Exodus 14:19-21 Triplets Section */}
-            <h3 className="manifesto-section-title">{currentTranslation.manifestoFullDecryptionStatus}</h3>
-            <p className="manifesto-p">{currentTranslation.manifestoTripletsOutput}</p>
-            <h4 className="manifesto-section-subtitle">{currentTranslation.manifesto72CommandsTitle}</h4>
-            <p className="manifesto-p">{currentTranslation.manifesto72CommandsSubtitle}</p>
-            <div className="table-container">
-              <pre>{currentTranslation.manifesto72CommandsTable}</pre>
-              {/* You would ideally populate the table dynamically or fetch its full content */}
-            </div>
-
-            <button className="close-manifesto-btn" onClick={() => setShowManifesto(false)}>
-              {currentTranslation.closeManifesto}
-            </button>
-          </div>
-        </div>
-      )}
-
+    <div className="App">
       <header className="app-header">
-        <h1 className="app-title">{currentTranslation.title}</h1>
-        <p className="app-byline">{currentTranslation.byline}</p>
-      </header>
-
-      <main className="app-main">
+        <h1>{currentTranslation.title}</h1>
+        <p className="byline">{currentTranslation.byline}</p>
         <div className="language-selector">
-          <label htmlFor="language-select">{currentTranslation.languageSelectLabel || 'Language:'}</label>
-          <select id="language-select" value={language} onChange={handleLanguageChange}>
+          <label htmlFor="language-select">Language:</label>
+          <select id="language-select" value={selectedLanguage} onChange={handleLanguageChange}>
             <option value="en">{currentTranslation.english}</option>
             <option value="es">{currentTranslation.spanish}</option>
           </select>
-          <button className="manifesto-button" onClick={() => setShowManifesto(true)}>
-            {currentTranslation.readManifesto}
-          </button>
         </div>
+      </header>
 
+      {showManifesto && (
+        <section className="manifesto-overlay">
+          <div className="manifesto-content">
+            <button onClick={() => setShowManifesto(false)} className="close-manifesto-button">
+              {currentTranslation.closeManifesto}
+            </button>
+            <h2>{currentTranslation.manifestoTitle}</h2>
+            <h3>{currentTranslation.manifestoSubtitle}</h3>
+            <h4>{currentTranslation.manifestoAuthor}</h4>
+            <p className="manifesto-preamble">{currentTranslation.manifestoPreamble}</p>
+
+            {/* New Manifesto Sections */}
+            <h2 className="manifesto-section-title">{currentTranslation.manifestoDiscoveryTitle}</h2>
+            <h3 className="manifesto-section-subtitle">{currentTranslation.manifestoCoreMechanismTitle}</h3>
+            <p className="manifesto-content-text">{currentTranslation.manifestoCoreMechanismContent}</p>
+
+            <h3 className="manifesto-section-subtitle">{currentTranslation.manifestoProofGenesisTitle}</h3>
+            <p className="manifesto-content-text">{currentTranslation.manifestoProofGenesisContent}</p>
+
+            <h3 className="manifesto-section-subtitle">{currentTranslation.manifestoDecryptionProtocolTitle}</h3>
+            <p className="manifesto-content-text">{currentTranslation.manifestoDecryptionProtocolContent}</p>
+
+            <h3 className="manifesto-section-subtitle">{currentTranslation.manifestoValidationExodusTitle}</h3>
+            <p className="manifesto-content-text">{currentTranslation.manifestoValidationExodusContent}</p>
+            {/* End New Manifesto Sections */}
+
+            <h2 className="manifesto-section-title">{currentTranslation.manifestoArticle1Title}</h2>
+            <p>{currentTranslation.manifestoArticle1Axiom}</p>
+            <p>{currentTranslation.manifestoArticle1Corollary}</p>
+
+            <h2 className="manifesto-section-title">{currentTranslation.manifestoArticle2Title}</h2>
+            <p>{currentTranslation.manifestoArticle2Content}</p>
+
+            <h2 className="manifesto-section-title">{currentTranslation.manifestoArticle3Title}</h2>
+            <p>{currentTranslation.manifestoArticle3Content}</p>
+
+            <h2 className="manifesto-section-title">{currentTranslation.manifestoArticle4Title}</h2>
+            <p>{currentTranslation.manifestoArticle4Challenges}</p>
+            <p>{currentTranslation.manifestoArticle4Tools}</p>
+
+            <h2 className="manifesto-section-title">{currentTranslation.manifestoArticle5Title}</h2>
+            <p>{currentTranslation.manifestoArticle5Content}</p>
+            <p className="manifesto-final-declaration">{currentTranslation.manifestoFinalDeclaration}</p>
+            <p className="manifesto-postscript">{currentTranslation.manifestoPostscript}</p>
+            <p className="manifesto-licensing">{currentTranslation.manifestoLicensingCode}</p>
+            <p className="manifesto-licensing">{currentTranslation.manifestoLicensingManifesto}</p>
+
+          </div>
+        </section>
+      )}
+
+      <main className="app-main">
         <section className="input-section">
           <h2>{currentTranslation.sacredScriptureInput}</h2>
           <textarea
-            className="text-input"
+            value={textAreaContent}
+            onChange={(e) => handleTextChange(e.target.value)}
             placeholder={currentTranslation.enterBibleVerses}
-            value={inputText}
-            onChange={handleTextChange}
             rows="10"
+            cols="80"
           ></textarea>
           <p className="word-count">
-            {wordCount > 0 ? currentTranslation.textLoaded.replace('{{count}}', wordCount) : currentTranslation.noTextLoaded}
+            {wordCount > 0
+              ? currentTranslation.textLoaded.replace('{{count}}', wordCount)
+              : currentTranslation.noTextLoaded}
           </p>
-          <button
-            className="translate-button"
-            onClick={debouncedGenerateOnomasticMessage}
-            disabled={onomasticLoading}
-          >
-            {onomasticLoading ? currentTranslation.onomasticMessageLoading : currentTranslation.translateText}
+          <button onClick={generateOnomasticMessage} disabled={onoMessageLoading}>
+            {onoMessageLoading ? 'Translating...' : currentTranslation.translateText}
           </button>
         </section>
 
         <section className="output-section">
-          <div className="output-column">
-            <h2>{currentTranslation.sectionNames}</h2>
-            <div className="names-list">
-              {identifiedNamesDetails.length > 0 ? (
-                <ul>
-                  {identifiedNamesDetails.map((item, index) => (
-                    <li key={index}><strong>{item.name}:</strong> {item.meaning}</li>
-                  ))}
-                </ul>
-              ) : (
-                <p>{currentTranslation.noOnomasticMessageFound}</p>
-              )}
+          <h2>{currentTranslation.sectionNames}</h2>
+          {onoMessageLoading ? (
+            <p>{currentTranslation.onomasticMessageLoading}</p>
+          ) : identifiedNames.length > 0 ? (
+            <ul className="identified-names-list">
+              {identifiedNames.map((item, index) => (
+                <li key={index}>
+                  <strong>{item.name}:</strong> {item.meaning}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>{currentTranslation.noOnomasticMessageFound}</p>
+          )}
+
+          <h2>{currentTranslation.sectionRawSequence}</h2>
+          {onoMessageLoading ? (
+            <p>{currentTranslation.onomasticMessageLoading}</p>
+          ) : rawOnomasticSequence && !rawOnomasticSequence.includes("Error:") ? (
+            <div className="raw-sequence-display">
+              <p>{rawOnomasticSequence}</p>
+              <button
+                onClick={getAiInterpretation}
+                disabled={aiInterpretationLoading || !rawOnomasticSequence || rawOnomasticSequence.includes("Error:")}
+              >
+                {aiInterpretationLoading ? 'Getting Interpretation...' : currentTranslation.getInterpretation}
+              </button>
             </div>
-          </div>
+          ) : (
+            <p>{currentTranslation.onomasticMessagePlaceholder}</p>
+          )}
 
-          <div className="output-column">
-            <h2>{currentTranslation.sectionRawSequence}</h2>
-            <div className="raw-onomastic-message">
-              {onomasticLoading ? (
-                <p>{currentTranslation.onomasticMessageLoading}</p>
-              ) : (
-                <p>{onomasticMessage || currentTranslation.onomasticMessagePlaceholder}</p>
-              )}
-            </div>
-          </div>
-        </section>
-
-        <section className="interpretation-section">
-          <h2>{currentTranslation.aiInterpretationTitle}</h2>
-          <button
-            className="get-interpretation-button"
-            onClick={getAiInterpretation}
-            disabled={aiLoading || !onomasticMessage || onomasticMessage.includes("Error:")}
-          >
-            {aiLoading ? currentTranslation.aiInterpretationLoading : currentTranslation.getInterpretation}
-          </button>
-
-          <div className="full-spiritual-flow">
-            <h3>{currentTranslation.sectionFullSpiritualFlow}</h3>
-            <textarea
-              className="interpretation-output"
-              value={aiInterpretation || currentTranslation.aiInterpretationPlaceholder}
-              readOnly
-              rows="15"
-              placeholder={currentTranslation.aiInterpretationPlaceholder}
-            ></textarea>
-            <div className="tts-controls">
-              {ttsStatus && <p className="tts-status">{ttsStatus}</p>}
-              {aiInterpretation && aiInterpretation !== currentTranslation.aiInterpretationLoading && (
-                <>
-                  {!ttsPlaying && (
-                    <button onClick={() => speakText(aiInterpretation)}>
-                      {currentTranslation.listenToFlow}
+          <div className="interpretation-section">
+            <h2>{currentTranslation.aiInterpretationTitle}</h2>
+            {aiInterpretationLoading ? (
+              <p>{currentTranslation.aiInterpretationLoading}</p>
+            ) : aiInterpretation && !aiInterpretation.includes("Error:") ? (
+              <>
+                <h3>{currentTranslation.sectionFullSpiritualFlow}</h3>
+                <p className="ai-interpretation-text">{aiInterpretation}</p>
+                <div className="speech-controls">
+                  <button onClick={() => speakText(aiInterpretation)} disabled={speechPlaying}>
+                    {currentTranslation.listenToFlow}
+                  </button>
+                  {!speechEnded && speechPlaying && (
+                    <button onClick={pauseSpeech} disabled={speechPaused}>
+                      {currentTranslation.pause}
                     </button>
                   )}
-                  {ttsPlaying && (
-                    <>
-                      <button onClick={pauseSpeech}>{currentTranslation.pause}</button>
-                      <button onClick={resumeSpeech}>{currentTranslation.resume}</button>
-                      <button onClick={stopSpeech}>{currentTranslation.stop}</button>
-                    </>
+                  {!speechEnded && speechPaused && (
+                    <button onClick={resumeSpeech} disabled={speechPlaying}>
+                      {currentTranslation.resume}
+                    </button>
                   )}
-                  <button onClick={copyInterpretationToClipboard}>
-                    {currentTranslation.copyFlow}
-                  </button>
-                </>
-              )}
-            </div>
-          </div>
+                  {(speechPlaying || speechPaused || speechEnded) && (
+                    <button onClick={stopSpeech}>
+                      {currentTranslation.stop}
+                    </button>
+                  )}
+                  {speechLoading && <p>{currentTranslation.ttsLoading}</p>}
+                </div>
+                <button onClick={copyFlowToClipboard} disabled={copied}>
+                  {copied ? currentTranslation.copied : currentTranslation.copyFlow}
+                </button>
+              </>
+            ) : (
+              <p>{currentTranslation.aiInterpretationPlaceholder}</p>
+            )}
 
-          <div className="summary-section">
-            <h3>{currentTranslation.sectionSummary}</h3>
-            <textarea
-              className="summary-output"
-              value={aiSummary || (summaryLoading ? currentTranslation.aiSummaryLoading : currentTranslation.aiInterpretationPlaceholder)}
-              readOnly
-              rows="5"
-              placeholder={currentTranslation.aiInterpretationPlaceholder}
-            ></textarea>
-            {aiSummary && (
-              <div className="tts-controls">
+            {aiSummary && !aiSummary.includes("Error:") && (
+              <div className="summary-section">
+                <h3>{currentTranslation.sectionSummary}</h3>
+                <p className="ai-summary-text">{aiSummary}</p>
                 <button onClick={() => speakText(aiSummary)}>
                   {currentTranslation.listenToSummary}
                 </button>
