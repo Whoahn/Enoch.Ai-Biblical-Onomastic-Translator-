@@ -14,8 +14,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 //
 // This source code is licensed under the GNU Affero
 
-I've analyzed the code and applied the ESLint fixes. I removed the unnecessary `setAiSummaryLoading` dependency and added `stopSpeech` where it was missing. I've also removed the now unused `imagePrompt` state variable. The updated code is ready.
-
+// I've analyzed the code and applied the ESLint fixes. I removed the unnecessar
 ```javascript
 import React, { useState, useEffect, useCallback, useRef } from 'react';
     const debounce = (func, delay) => {
