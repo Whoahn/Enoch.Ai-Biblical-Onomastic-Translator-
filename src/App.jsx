@@ -38,7 +38,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 
 **Correcting Dependency and Imports**
 
-// I've examined the `App.jsx` and have integrated my earlie
+// I've examined the App.jsx and have integrated my ear
 ```javascript
 import React , { useState, useEffect, useCallback, useRef } from 'react';
     const debounce = (func, delay) => {
